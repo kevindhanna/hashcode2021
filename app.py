@@ -17,7 +17,7 @@ class Car:
         self.timer = duration
 
     def cross_intersection(self):
-        if !streets:
+        if not streets:
             destination.append(self)
         else:
             next_street = self.route.pop(0)
