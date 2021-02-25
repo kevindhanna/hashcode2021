@@ -31,27 +31,35 @@ class Schedule():
     def __init__(self, streets):
         self.streets = streets
         self.position = 0
+        self.generator = self.build_generator()
 
-    def __next__(self):
+    def next(self):
         # This is what jkz was talking about
         #
-        # while True:
-        #     for street in self.streets:
-        #         yield street
+        return next(self.generator)
+
         #
-        street = self.streets[self.position % len(self.streets)]
-        self.position += 1
-        return street
-    
+        # street = self.streets[self.position % len(self.streets)]
+        # self.position += 1
+        # return street
+        #
+
+    def build_generator(self):
+        while True:
+            for street, count in self.streets:
+                for _ in range(count):
+                    yield street
+
 class Intersection:
     def __init__(self, id):
         self.id = id
+        self.starts = collections.defaultdict(list)
         self.ends = collections.defaultdict(list) # a dict of lists of cars, indexed by street name
         self.set_new_schedule()
 
     def tick(self):
         if self.schedule.streets:
-            next_street = next(self.schedule)
+            next_street = self.schedule.next()
             pending_cars = self.ends[next_street]
             if (pending_cars and pending_cars[0].timer <= 0):
                 next_car = pending_cars.pop(0)
@@ -65,27 +73,30 @@ def parse_lines(lines):
     Config = collections.namedtuple("Config", list("DISCF"))
     config = Config(*map(int, lines.pop(0).strip().split()))
 
-    intersections = {}
+    intersections = []
     for i in range(0, config.I):
-        intersections[i] = Intersection(i)
+        intersections.append(Intersection(i))
 
     streets = {}
     for _ in range(0, config.S):
         start, end, name, length = lines.pop(0).strip().split()
-        streets[name] = Street(intersections[int(start)], intersections[int(end)], name, length)
+        streets[name] = Street(intersections[int(start)], intersections[int(end)], name, int(length))
 
     destination = []
     cars = []
     for _ in range(0, config.C):
         route = [streets[name] for name in lines.pop(0).strip().split()[1:]]
-        cars.append(Car(route, destination))
+        car = Car(route, destination)
+        cars.append(car)
+        start = car.route[0]
+        intersections[start.end.id].ends[start.name].append(car)
 
     return cars, streets, intersections, config, destination
 
 # Return solution score
 def score(cars, intersections, conf, destination):
-    for _ in range(conf.D):
-        for i in intersections.values():
+    for t in range(conf.D):
+        for i in intersections:
             i.tick()
         for c in cars:
             c.tick()
@@ -94,11 +105,11 @@ def score(cars, intersections, conf, destination):
 # Return output string for submission
 def output(cars, intersections, conf, destination):
     lines = []
-    i_with_schedules = [i for i in intersections.values() if i.schedule.streets]
+    i_with_schedules = [i for i in intersections if i.schedule.streets]
     lines.append(len(i_with_schedules))
     for i in i_with_schedules:
         lines.append(i.id)
         lines.append(len(i.schedule.streets))
-        for s in i.schedule.streets:
-            lines.append(f"{s.name} {s.duration}")
+        for name, duration in i.schedule.streets:
+            lines.append(f"{name} {duration}")
     return '\n'.join(map(str, lines))
