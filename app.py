@@ -95,12 +95,16 @@ def parse_lines(lines):
 
 # Return solution score
 def score(cars, intersections, conf, destination):
+    pct = 0
     for t in range(conf.D):
-        print(t)
+        if int(100 * t / conf.D) > pct:
+            print(f'{pct}%', end='\r')
+            pct = int(100 * t / conf.D)
         for i in intersections:
             i.tick()
         for c in cars:
             c.tick()
+    print("Cars finished: ", len(destination))
     return sum(conf.F - car.timer for car in destination)
 
 # Return output string for submission

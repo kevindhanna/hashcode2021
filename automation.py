@@ -67,10 +67,19 @@ def run_run(solution, input):
     run = load_solution(solution)
     args = load_input(input)
 
+    start = datetime.datetime.now()
+
     result = run(*args)
+    result_done = datetime.datetime.now()
+    print("result took: ", result_done - start)
+
     score = app.score(*result)
+    score_done = datetime.datetime.now()
+    print("score took: ", score_done - result_done)
+
     output = app.output(*result)
-    print(score)
+
+    print("Score: ", score)
     store_run(solution, input, score, output)
 
     return score, result
