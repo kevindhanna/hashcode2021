@@ -68,8 +68,8 @@ def run_run(solution, input):
     args = load_input(input)
 
     result = run(*args)
-    score = app.score(result)
-    output = app.output(result)
+    score = app.score(*result)
+    output = app.output(*result)
     print(score)
     store_run(solution, input, score, output)
 
