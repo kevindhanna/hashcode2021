@@ -96,6 +96,7 @@ def parse_lines(lines):
 # Return solution score
 def score(cars, intersections, conf, destination):
     for t in range(conf.D):
+        print(t)
         for i in intersections:
             i.tick()
         for c in cars:
