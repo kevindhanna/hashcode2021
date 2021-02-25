@@ -15,29 +15,39 @@ class Car:
     def set_timer(duration):
         self.timer = duration
 
+    def cross_intersection(self):
+        next_street = self.route.pop(0)
+        next_street.end.ends[next_street.name].append(self)
+        self.set_timer(next_street.length)
+
     def tick():
         self.timer -= 1
 
+class Schedule():
+    def __init__(self, streets):
+        self.streets = streets
+        self.position = 0
+
+    def __next__(self):
+        street = self.streets[self.position % len(self.streets)]
+        self.position += 1
+        return street
+    
 class Intersection(self):
     def __init__(self, id):
         self.id = id
         self.ends = collections.defaultdict(list) # a dict of lists of cars, indexed by street name
+        self.set_new_schedule()
 
-    def tick():
-        # get green light from schedule, pop car if timer is <= 0
-        # update and tick all cars
+    def tick(self):
+        next_street = next(self.schedule)
+        pending_cars = self.ends[next_street]
+        if (pending_cars and pending_cars[0].timer <= 0):
+            next_car = pending_cars.pop(0)
+            next_car.cross_intersection()
 
-    def set_schedule(schedule):
-        self.schedule = schedule # schedule instance
-
-class Schedule():
-    def __init__(self, [(street, count), (street2, count)]):
-        self.streets = [street] * count + [street2] * count
-
-    def tick():
-        # magical generator to spit out self.streets
-
-def global_tick(cars, streets, intersections):
+    def set_new_schedule():
+        self.schedule = Schedule() # schedule instance
 
 def run(cars, streets, intersections, duration, score):
 
