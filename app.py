@@ -8,17 +8,21 @@ class Street:
         self.name = name
 
 class Car:
-    def __init__(self, route):
+    def __init__(self, route, destination):
         self.route = route
         self.set_timer(0)
+        self.destination = destination
 
     def set_timer(self, duration):
         self.timer = duration
 
     def cross_intersection(self):
-        next_street = self.route.pop(0)
-        next_street.end.ends[next_street.name].append(self)
-        self.set_timer(next_street.length)
+        if not streets:
+            destination.append(self)
+        else:
+            next_street = self.route.pop(0)
+            next_street.end.ends[next_street.name].append(self)
+            self.set_timer(next_street.length)
 
     def tick(self):
         self.timer -= 1
@@ -52,33 +56,26 @@ class Intersection:
 def run(cars, streets, intersections, duration, score):
     pass
 
-def parse_file(name):
-    # intersections = {id => Intersection}
-    # streets = {name => Street}
-    # cars = [Car]
-    with open(name, 'r') as f:
-        Config = collections.namedtuple("Config", list("DISCF"))
-        config = Config(*f.readline().strip().split())
-
-        intersections = {}
-        intersections[-1] = Intersection(-1)
-        for i in range(0, config.I):
-            intersections[i] = Intersection(i)
-
-        streets = {}
-        for s in range(0, config.S):
-            start, end, name, length = f.readline().strip().split()
-            streets[name] = Street(intersections[start], intersections[end], name, length)
-
-        for c in range(0, config.C):
-            route = [streets[name] for name in f.readline().strip().split()[1:]]
-            cars.append(Car(route))
-
-        return cars, streets, intersections, config
-
 # Return args for run
 def parse_lines(lines):
-    return tuple()
+    Config = collections.namedtuple("Config", list("DISCF"))
+    config = Config(next(lines).strip().split())
+
+    intersections = {}
+    for i in range(0, config.I):
+        intersections[i] = Intersection(i)
+
+    streets = {}
+    for s in range(0, config.S):
+        start, end, name, length = next(lines).strip().split()
+        streets[name] = Street(intersections[start], intersections[end], name, length)
+
+    destination = []
+    for c in range(0, config.C):
+        route = [streets[name] for name in next(lines).strip().split()[1:]]
+        cars.append(Car(route, destination))
+
+    return tuple(cars, streets, intersections, config)
 
 # Return solution score
 def score(result):
