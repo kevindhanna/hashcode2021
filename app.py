@@ -12,7 +12,7 @@ class Car:
         self.route = route
         self.set_timer(0)
 
-    def set_timer(duration):
+    def set_timer(self, duration):
         self.timer = duration
 
     def cross_intersection(self):
@@ -20,7 +20,7 @@ class Car:
         next_street.end.ends[next_street.name].append(self)
         self.set_timer(next_street.length)
 
-    def tick():
+    def tick(self):
         self.timer -= 1
 
 class Schedule():
@@ -33,7 +33,7 @@ class Schedule():
         self.position += 1
         return street
     
-class Intersection(self):
+class Intersection:
     def __init__(self, id):
         self.id = id
         self.ends = collections.defaultdict(list) # a dict of lists of cars, indexed by street name
@@ -46,10 +46,11 @@ class Intersection(self):
             next_car = pending_cars.pop(0)
             next_car.cross_intersection()
 
-    def set_new_schedule():
-        self.schedule = Schedule() # schedule instance
+    def set_new_schedule(self, streets = []):
+        self.schedule = Schedule(streets) # schedule instance
 
 def run(cars, streets, intersections, duration, score):
+    pass
 
 def parse_file(name):
     # intersections = {id => Intersection}
