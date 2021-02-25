@@ -39,7 +39,7 @@ class Schedule():
 
 def global_tick(cars, streets, intersections):
 
-def run(cars, streets, intersections, duration):
+def run(cars, streets, intersections, duration, score):
 
 # Return args for run
 def parse_lines(lines):
