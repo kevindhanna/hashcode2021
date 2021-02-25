@@ -17,8 +17,8 @@ class Car:
         self.timer = duration
 
     def cross_intersection(self):
-        if not streets:
-            destination.append(self)
+        if not self.route:
+            self.destination.append(self)
         else:
             next_street = self.route.pop(0)
             next_street.end.ends[next_street.name].append(self)
@@ -66,12 +66,13 @@ def parse_lines(lines):
         intersections[i] = Intersection(i)
 
     streets = {}
-    for s in range(0, config.S):
+    for _ in range(0, config.S):
         start, end, name, length = next(lines).strip().split()
         streets[name] = Street(intersections[start], intersections[end], name, length)
 
     destination = []
-    for c in range(0, config.C):
+    cars = []
+    for _ in range(0, config.C):
         route = [streets[name] for name in next(lines).strip().split()[1:]]
         cars.append(Car(route, destination))
 
