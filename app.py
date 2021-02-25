@@ -21,7 +21,6 @@ class Car:
 class Intersection(self):
     def __init__(self, id):
         self.id = id
-        self.starts = collections.defaultdict(list) # a dict of lists of cars, indexed by street name
         self.ends = collections.defaultdict(list) # a dict of lists of cars, indexed by street name
 
     def tick():
@@ -37,6 +36,10 @@ class Schedule():
 
     def tick():
         # magical generator to spit out self.streets
+
+def global_tick(cars, streets, intersections):
+
+def run(cars, streets, intersections, duration):
 
 # Return args for run
 def parse_lines(lines):
