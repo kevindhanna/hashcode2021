@@ -8,17 +8,21 @@ class Street:
         self.name = name
 
 class Car:
-    def __init__(self, route):
+    def __init__(self, route, destination):
         self.route = route
         self.set_timer(0)
+        self.destination = destination
 
     def set_timer(duration):
         self.timer = duration
 
     def cross_intersection(self):
-        next_street = self.route.pop(0)
-        next_street.end.ends[next_street.name].append(self)
-        self.set_timer(next_street.length)
+        if !streets:
+            destination.append(self)
+        else:
+            next_street = self.route.pop(0)
+            next_street.end.ends[next_street.name].append(self)
+            self.set_timer(next_street.length)
 
     def tick():
         self.timer -= 1
