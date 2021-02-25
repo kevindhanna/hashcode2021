@@ -8,7 +8,7 @@ class Street:
         self.name = name
 
 class Car:
-    def __init__(self, id, route):
+    def __init__(self, route):
         self.route = route
         self.set_timer(0)
 
@@ -40,6 +40,30 @@ class Schedule():
 def global_tick(cars, streets, intersections):
 
 def run(cars, streets, intersections, duration, score):
+
+def parse_file(name):
+    # intersections = {id => Intersection}
+    # streets = {name => Street}
+    # cars = [Car]
+    with open(name, 'r') as f:
+        Config = collections.namedtuple("Config", list("DISCF"))
+        config = Config(*f.readline().strip().split())
+
+        intersections = {}
+        intersections[-1] = Intersection(-1)
+        for i in range(0, config.I):
+            intersections[i] = Intersection(i)
+
+        streets = {}
+        for s in range(0, config.S):
+            start, end, name, length = f.readline().strip().split()
+            streets[name] = Street(intersections[start], intersections[end], name, length)
+
+        for c in range(0, config.C):
+            route = [streets[name] for name in f.readline().strip().split()[1:]]
+            cars.append(Car(route))
+
+        return cars, streets, intersections, config
 
 # Return args for run
 def parse_lines(lines):
