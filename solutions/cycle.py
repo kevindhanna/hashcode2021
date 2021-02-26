@@ -3,4 +3,4 @@ def run(cars, streets, intersections, conf, destination):
         i = s.end
         i.set_new_schedule([(s.name, 1)] + i.schedule.streets)
 
-    return cars, intersections, conf, destination
+    return cars, streets, intersections, conf, destination

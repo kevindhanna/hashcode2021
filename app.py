@@ -65,8 +65,8 @@ class Intersection:
                 next_car = pending_cars.pop(0)
                 next_car.cross_intersection()
 
-    def set_new_schedule(self, streets = []):
-        self.schedule = Schedule(streets) # schedule instance
+    def set_new_schedule(self, streets = None):
+        self.schedule = Schedule(streets or []) # schedule instance
 
 # Return args for run
 def parse_lines(lines):
@@ -94,7 +94,7 @@ def parse_lines(lines):
     return cars, streets, intersections, config, destination
 
 # Return solution score
-def score(cars, intersections, conf, destination):
+def score(cars, streets, intersections, conf, destination):
     pct = 0
     for t in range(conf.D):
         if int(100 * t / conf.D) > pct:
@@ -108,7 +108,7 @@ def score(cars, intersections, conf, destination):
     return sum(conf.F - car.timer for car in destination)
 
 # Return output string for submission
-def output(cars, intersections, conf, destination):
+def output(cars, streets, intersections, conf, destination):
     lines = []
     i_with_schedules = [i for i in intersections if i.schedule.streets]
     lines.append(len(i_with_schedules))
